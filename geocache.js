@@ -18,22 +18,22 @@ var idArray = {};
 var tableVisible = true;
 
 //initialize map and location
-function initialize() 
-{       
+function initialize()
+{
     var mapDiv = document.getElementById('map-canvas');
     var mapOptions = {
-    center: { lat: -34.397, lng: 150.644},
-    zoom: 11
+    center: { lat: -43.575746, lng: 172.617207},
+    zoom: 14
     };
     map = new google.maps.Map( mapDiv,
           mapOptions);
-    
+
     geoFindMe();
-    //initMapControls();
+    // initMapControls();
 }
 
 //find user location
-function geoFindMe() 
+function geoFindMe()
 {
     var output = document.getElementById("out");
 
@@ -43,7 +43,7 @@ function geoFindMe()
         return;
     }
 
-    function success(position) 
+    function success(position)
     {
         var latitude  = position.coords.latitude;
         var longitude = position.coords.longitude;
@@ -61,9 +61,12 @@ function geoFindMe()
 
     }
 
-    function error() 
+    function error()
     {
         alert("Unable to retrieve your location");
+
+        drawCircle();
+        initMapControls();
     }
 
     navigator.geolocation.getCurrentPosition(success, error);
@@ -115,11 +118,11 @@ function initMapControls()
     }
     else
     {
-        longitudeInput.value = map.getCenter().lng(); 
+        longitudeInput.value = map.getCenter().lng();
     }
 
     latitudeInput.setAttribute('id', 'latitudeInput');
-    longitudeInput.setAttribute('id', 'longitudeInput');    
+    longitudeInput.setAttribute('id', 'longitudeInput');
 
     radiusOption.value = "0";
     radiusOption.text = "Radius:";
@@ -146,8 +149,8 @@ function initMapControls()
         option.value = i;
         option.text = cacheTypes[i];
         typeSelect.add(option);
-    }    
-    
+    }
+
     for(var i=1; i<=10; i++)
     {
         var option = document.createElement('option');
@@ -158,7 +161,7 @@ function initMapControls()
 
     //radiusSelect.addEventListener("change", function(){changeRadius(radiusSelect);});
     goButton.appendChild(document.createTextNode("Find Geocaches!"));
-    goButton.addEventListener("click", 
+    goButton.addEventListener("click",
         function(){findGeocaches(radiusSelect.value, difficultySelect.value, typeSelect.value);});
 
     controlDiv.appendChild(goButton);
@@ -215,7 +218,7 @@ function displayPhotos()
 
     for(var i=0; i<urls.length; i++)
     {
-        (function () 
+        (function ()
         {
             var img = document.createElement("img");
             img.src = urls[i];
@@ -282,7 +285,7 @@ function findGeocaches(radius, difficulty, cacheType)
 function displayGeocaches()
 {
     var geocaches = JSON.parse(this.responseText);
- 
+
     deleteMarkers();
     var table = document.getElementById('geoTable');
     removeAllChildren(table);
@@ -317,7 +320,7 @@ function displayGeocaches()
 
 
 
-        row.addEventListener("click", 
+        row.addEventListener("click",
             function(){
 
                 selectRow(this);
@@ -327,7 +330,7 @@ function displayGeocaches()
         idArray[geocaches[i]] = [marker, row];
 
         table.appendChild(row);
-    }   
+    }
 }
 
 //selects a row from the table
@@ -366,7 +369,7 @@ function deleteMarkers()
 //remove all children from a parent node
 function removeAllChildren(parentNode)
 {
-    while (parentNode.firstChild) 
+    while (parentNode.firstChild)
     {
         parentNode.removeChild(parentNode.firstChild);
     }
@@ -383,7 +386,7 @@ function createGeocacheTable()
     var showHideButton = document.createElement('img');
     showHideButton.src = 'arrowHide.png';
     showHideButton.setAttribute('id', 'showHideButton');
-    showHideButton.addEventListener('click', 
+    showHideButton.addEventListener('click',
         function(){showHideTable(table, this);});
 
     createTableHeaders(table);
@@ -414,7 +417,7 @@ function showHideTable(table, button)
 //add table headers to the table
 function createTableHeaders(table)
 {
-    var tableHeaders = ["ID", "Lat", "Lon", "Type", "Difficulty"];  
+    var tableHeaders = ["ID", "Lat", "Lon", "Type", "Difficulty"];
     var row = document.createElement('tr');
     for(var i=0; i<5; i++)
     {
